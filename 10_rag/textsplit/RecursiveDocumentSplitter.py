@@ -7,7 +7,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_unstructured import UnstructuredLoader
 
 # 1.创建文档加载器，进行文档加载
-loader = UnstructuredLoader("rag.txt")
+loader = UnstructuredLoader("10_rag/textsplit/rag.txt")
 documents = loader.load()
 
 # 2.定义递归文本分割器

@@ -30,6 +30,7 @@ splitter_texts = text_splitter.split_text(content)
 
 # 4.转换为文档对象
 # 将分割后的文本块转换为文档对象列表
+# create_documents方法会对每个文本块进行二次分割，底层是split_text，可能会导致内容丢失，尤其是当文本块的有效内容不足以满足chunk_size时
 splitter_documents = text_splitter.create_documents(splitter_texts)
 print(f"原始文本大小：{len(content)}")
 print(f"分割文档数量：{len(splitter_documents)}")
