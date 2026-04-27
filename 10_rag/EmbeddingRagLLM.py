@@ -10,6 +10,8 @@ from langchain_classic.text_splitter import CharacterTextSplitter
 from langchain_core.runnables import RunnablePassthrough
 from langchain_community.embeddings import DashScopeEmbeddings
 from langchain_community.vectorstores import Redis
+from dotenv import load_dotenv
+load_dotenv()  # 加载环境变量
 
 # 没有使用RAG，直接查询大模型，出现歧义，上课时先给学生演示before情况，没有用RAG
 '''llm = init_chat_model(
@@ -22,9 +24,9 @@ response=llm.invoke("00000是什么意思")
 print(response.content)'''
 
 llm = init_chat_model(
-    model="qwen-plus",
+    model="qwen3.5-plus",
     model_provider="openai",
-    api_key=os.getenv("aliQwen-api"),
+    api_key=os.getenv("QWEN_API_KEY"),
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
 )
 
@@ -49,7 +51,7 @@ prompt = PromptTemplate(
 # 1. 初始化阿里千问 Embedding 模型
 embeddings = DashScopeEmbeddings(
     model="text-embedding-v3",  # 支持 v1 或 v2
-    dashscope_api_key=os.getenv("aliQwen-api")  # 从环境变量读取
+    dashscope_api_key=os.getenv("QWEN_API_KEY")  # 从环境变量读取
 )
 
 # 4. 加载文档
@@ -57,7 +59,8 @@ embeddings = DashScopeEmbeddings(
 # loader = TextLoader("alibaba-more.docx", encoding="utf-8")
 
 # 4.2 LangChain提供了Docx2txtLoader专门用于加载.docx文件，先通过pip install docx2txt
-loader = Docx2txtLoader("alibaba-java.docx")  # 直接传入文件路径即可
+# 也可以用UnstructuredWordDocumentLoader加载.docx文件
+loader = Docx2txtLoader("10_rag/alibaba-java.docx")  # 直接传入文件路径即可
 documents = loader.load()
 
 # 5. 分割文档
@@ -69,7 +72,7 @@ print(f"文档个数:{len(texts)}")
 # 6. 创建向量存储
 # 连接到 Redis 并存入向量（自动调用 embeddings 嵌入）
 vector_store = Redis.from_documents(
-    documents=documents,
+    documents=texts,
     embedding=embeddings,
     redis_url="redis://localhost:26379",  # 替换为你的 Redis 地址
     index_name="my_index3",  # 向量索引名称
@@ -79,9 +82,10 @@ retriever = vector_store.as_retriever(search_kwargs={"k": 2})
 
 # 8. 创建Runnable链
 rag_chain = (
+    # 会被自动转换成一个 RunnableParallel，意思是：把同一个输入并行传给多个 Runnable，然后组装成一个字典输出。
         {
-            "context": retriever,
-            "question": RunnablePassthrough()
+            "context": retriever,  # retriever.invoke("00000和A0001分别是什么意思")
+            "question": RunnablePassthrough()  # 输入原样传下去，原始问题不做任何处理，直接作为 question
         }
         | prompt
         | llm

@@ -2,12 +2,14 @@
 from langchain_redis import RedisConfig, RedisVectorStore
 from langchain_community.embeddings import DashScopeEmbeddings
 import os
+from dotenv import load_dotenv
+load_dotenv()  # 加载环境变量
 
 # 初始化 Embedding 模型
 # 1. 初始化阿里千问 Embedding 模型
 embeddingsModel = DashScopeEmbeddings(
     model="text-embedding-v3",  # 支持 v1 或 v2
-    dashscope_api_key=os.getenv("aliQwen-api")  # 从环境变量读取
+    dashscope_api_key=os.getenv("QWEN_API_KEY")  # 从环境变量读取
 )
 
 # ========== 存储数据 ==========

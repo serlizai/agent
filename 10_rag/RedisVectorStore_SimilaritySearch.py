@@ -2,12 +2,14 @@
 from langchain_redis import RedisConfig, RedisVectorStore
 from langchain_community.embeddings import DashScopeEmbeddings
 import os
+from dotenv import load_dotenv
+load_dotenv()  # 加载环境变量
 
 # 初始化 Embedding 模型
 # 1. 初始化阿里千问 Embedding 模型
 embeddingsModel = DashScopeEmbeddings(
     model="text-embedding-v3",  # 支持 v1 或 v2
-    dashscope_api_key=os.getenv("aliQwen-api")  # 从环境变量读取
+    dashscope_api_key=os.getenv("QWEN_API_KEY")  # 从环境变量读取
 )
 
 #2. 创建Redis向量存储实例
@@ -25,6 +27,6 @@ print("=== 查询结果 ===")
 for i, (doc, score) in enumerate(results, 1):
     similarity = 1 - score  #  score 是距离，可以转成相似度
     print(f"结果 {i}:")
-    print(f"内容: {doc.page_content}")
+    print(f"内容: {doc.page_content}") 
     print(f"元数据: {doc.metadata}")
     print(f"相似度: {similarity:.4f}")
