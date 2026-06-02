@@ -59,7 +59,7 @@ prompt = ChatPromptTemplate.from_messages(
     [
         ("system", "你是天气助手，请根据用户的问题，给出相应的天气信息"),
         ("human", "{input}"),
-        ("placeholder", "{agent_scratchpad}"),
+        ("placeholder", "{agent_scratchpad}"),  # Agent 调工具的过程和结果会被填充在这里
     ]
 )
 

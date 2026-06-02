@@ -25,14 +25,18 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableLambda
 from langchain.tools import tool
+from dotenv import load_dotenv
+
+# 加载环境变量
+load_dotenv()
 
 # ===================== 通义千问配置（完全不变） =====================
 llm = ChatOpenAI(
-    model="qwen-plus",
-    api_key=os.getenv("aliQwen-api"),
+    model="qwen3.6-flash",
+    api_key=os.getenv("QWEN_API_KEY"),
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
 )
-output_parser = StrOutputParser()
+output_parser = StrOutputParser() # 把模型返回结果转成字符串
 
 # ===================== 模拟业务函数（@tool装饰器） =====================
 @tool("CtripBookFlight", description="预订机票的唯一工具，必须调用，参数是departure出发地、arrival目的地、date出行日期（格式2026-02-01）")
@@ -99,6 +103,8 @@ def create_travel_coordinator_agent(llm, ctrip_chain, meituan_chain, didi_chain)
             ctrip_result = ctrip_chain.invoke({"input": "订机票"})
         except:
             ctrip_result = ""
+        # if Agent 没返回内容:
+            # 直接调用原始函数兜底
         if not ctrip_result.strip():
             ctrip_result = ctrip_func("北京", "上海", "2026-02-01")  # 替换为原始函数
         print(f"✅ 携程测试结果：\n{ctrip_result}\n" + "-"*80 + "\n")

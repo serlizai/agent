@@ -27,6 +27,7 @@ prompt1 = PromptTemplate.from_template(
 llm_with_tools = llm.bind_tools([search])
 
 # 解析模型输出中的工具调用参数，并把参数真正传给 search 工具执行
+# 只取模型发起的第一个工具调用的参数，作为 search 工具的输入
 search_parser = JsonOutputKeyToolsParser(key_name=search.name, first_tool_only=True)
 
 
