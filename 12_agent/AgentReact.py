@@ -122,11 +122,18 @@ print()
 print()
 
 # # 详细追踪ReAct循环过程
+# AIMessage 有 tool_calls
+# => 模型决定调用工具
+# ToolMessage
+# => 工具返回结果
+# AIMessage 没有 tool_calls
+# => 模型根据工具结果给最终答案
 def track_react_cycle(messages):
     print("ReAct循环步骤分析:")
     step = 1
     for i, msg in enumerate(messages):
-        msg_type = msg.__class__.__name__
+        msg_type = msg.__class__.__name__  # 获取消息类型 
+        # 当前消息是 AIMessage，这个消息对象有 tool_calls 属性，tool_calls 不为空
         if msg_type == "AIMessage" and hasattr(msg, 'tool_calls') and msg.tool_calls:
             print(f"\n🔄 步骤{step}: Reasoning + Acting")
             for tool_call in msg.tool_calls:
