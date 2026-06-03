@@ -69,4 +69,5 @@ print(result)
 
 print()
 
+# indent=2 把 JSON 格式化输出，每一层缩进 2 个空格，ensure_ascii=False 让中文正常显示
 print(json.dumps(result["structured_response"], ensure_ascii=False, indent=2))

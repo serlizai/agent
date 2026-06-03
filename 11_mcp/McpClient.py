@@ -19,7 +19,7 @@ class MCPWeatherClient:
             logger.warning(f"工具 '{tool_name}' 未在服务端注册")
         return is_available
 
-    def call_get_weather(self, city: str) -> str or None:
+    def call_get_weather(self, city: str) -> str | None:
         """调用服务端的 get_weather 工具，查询指定城市天气"""
         tool_name = "get_weather"
         if not self.check_tool_availability(tool_name):
