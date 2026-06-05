@@ -12,6 +12,9 @@ from langgraph.graph.message import add_messages
 import os
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage
+from dotenv import load_dotenv
+
+load_dotenv()  # 加载环境变量
 
 
 # ========== 1. 定义状态（State） ==========
@@ -22,9 +25,9 @@ class AtguiguState(TypedDict):
 
 # ========== 2. 定义大模型 ==========
 llm = init_chat_model(
-    model="qwen-plus",
+    model="qwen3.6-flash",
     model_provider="openai",
-    api_key=os.getenv("aliQwen-api"),
+    api_key=os.getenv("QWEN_API_KEY"),
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
 )
 

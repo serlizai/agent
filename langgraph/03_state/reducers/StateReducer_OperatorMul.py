@@ -14,6 +14,8 @@ class MultiplyState(TypedDict):
 
 
 def multiplier(state: MultiplyState) -> dict:
+    print(f"执行 multiplier 节点:")
+    print(f"  输入: {state}")
     return {"factor": 2.0}
 
 
@@ -22,7 +24,7 @@ def run_demo():
 这不是bug，是设计决策：LangGraph选择用类型默认值初始化状态字段
 对于不同操作，需要不同处理：
 加法：恒等元是0.0，所以operator.add可以直接用
-乘法：恒等元是1.0，需要特殊处理初始的0.0
+乘法：恒等元是1.0，需要特殊处理初始的0.0，LangGraph 在初始化 float 类型字段时，可能会先用默认值：0.0
 自定义reducer是标准做法：复杂的业务逻辑都应该使用自定义reducer
 
 这是LangGraph使用中的一个常见陷阱！建议在使用乘法、除法等非加法操作时，总是使用自定义reducer来处理初始值问题

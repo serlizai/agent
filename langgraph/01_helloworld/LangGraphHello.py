@@ -3,7 +3,8 @@ from langgraph.graph import StateGraph, START, END
 import uuid
 
 # 1．定义State(可选)
-class HelloState(TypedDict):
+# TypedDict 主要是给类型检查和 IDE 用的，运行时并不会强制要求传入的字典必须包含所有定义的字段。
+class HelloState(TypedDict):  # 字典类型，定义了状态的结构
     name: str
     greeting: str
 
@@ -43,7 +44,7 @@ print(result["greeting"])
 #
 # #6 打印图的边和节点信息
 #6.1 打印图的ascii可视化结构
-print(app.get_graph().print_ascii())
+app.get_graph().print_ascii()
 print("="*50)
 #
 # #6.2 打印图的Mermaid代码可视化结构并通过https://www.processon.com/mermaid编辑器查看
