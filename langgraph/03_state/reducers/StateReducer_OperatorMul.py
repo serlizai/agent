@@ -52,6 +52,13 @@ operator.mul作为 LangGraph 归约器的执行逻辑是：
     builder.add_edge("multiplier", END)
     graph = builder.compile()
 
+    # LangGraph在执行初始阶段（我们定义的第一个node前），会默认调用一次reducer（后面自定义reducer案例中进行了打印验证），
+    # 用默认值与invoke传递的值进行计算：
+    # 此案例中，invoke中传递了一个默认值5.0，由于会默认调用一次reducer，
+    # 执行operator.mul(默认初始值, invoke传入的值) 
+    # 执行的计算是： 0.0（float默认值） * 5.0(invoke传递的初始值) = 0.0
+    # 导致后续乘法结果一直都是0
+    # 初始默认值: factor = 0.0 
     result = graph.invoke({"factor": 5.0})
     print(f"初始状态: {{'factor': 5.0}}")
     print(f"执行结果: {result}\n")

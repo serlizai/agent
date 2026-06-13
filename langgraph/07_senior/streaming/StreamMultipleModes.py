@@ -61,6 +61,7 @@ def reflect(state: AtguiguState) -> AtguiguState:
 
     steps.append(f"结论: {conclusion}")
 
+
     return {"steps": steps}
 
 

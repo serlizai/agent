@@ -49,7 +49,7 @@ def create_task_description_handoff_tool(*, agent_name: str, description: str | 
 
         return Command(
             goto=[Send(agent_name, agent_input)],
-            graph=Command.PARENT,
+            graph=Command.PARENT,  # 跳出当前 Agent 子图，到父图层级去找 hotel_assistant 节点
         )
 
     return handoff_tool
@@ -92,6 +92,7 @@ transfer_to_hotel_assistant = create_task_description_handoff_tool(
 # 通过 tool schema + tool 名称 + tool docstring
 # 通过 graph 上下文（handoff 描述）
 # 通过 MessagesState 历史消息
+# 每个agent相当于一个子图，工具函数相当于子图节点，agent之间通过 Command 的 Send 跳转调用
 # ===============================
 flight_assistant = create_agent(
     model=model,

@@ -21,7 +21,7 @@ from langgraph.types import Send
 # 定义状态
 class AtguiguState(TypedDict):
     subjects: List[str]
-    jokes: Annotated[List[str], lambda x, y: x + y]  # 使用列表合并的方式
+    jokes: Annotated[List[str], lambda x, y: x + y]  # 使用列表合并的方式，可以换成operator.add
 
 
 # 第一个节点：生成需要处理的主题列表
@@ -61,6 +61,7 @@ def map_subjects_to_jokes(state: AtguiguState) -> List[Send]:
 
     # 为每个主题创建一个Send对象，指向make_joke节点
     # 每个Send对象包含节点名称和传递给该节点的状态
+    # Send("目标节点名", {"传给这个节点的数据": xxx})
     send_list = [Send("make_joke", {"subject": subject}) for subject in subjects]
     print(f"生成Send对象列表: {send_list}")
     return send_list
@@ -81,9 +82,11 @@ def main():
     builder.add_edge(START, "generate_subjects")
 
     # 添加条件边，使用Send对象实现map-reduce
+    # 因为是动态执行所以静态图编译时不知道会有多少个make_joke节点，所以显示不出来
     builder.add_conditional_edges(
         "generate_subjects",  # 源节点
         map_subjects_to_jokes  # 路由函数，返回Send对象列表
+        # path_map = ["make_joke"]  用来声明条件边可能流向哪些节点；这个条件边可能会去 make_joke，辅助理解
     )
 
     # 从make_joke到结束

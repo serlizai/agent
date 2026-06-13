@@ -29,8 +29,8 @@ def node_1(state:MyState):
     return {"messages":["abc","def"]}
 
 def main():
-	# 数据存储到D:\\44目录下面，需要目录存在
-    conn = sqlite3.connect(database="D:\\44\\sqlite_data.db",check_same_thread=False)
+	# 数据存储到D:\\44目录下面，需要目录存在，check_same_thread=False允许多线程访问同一个数据库连接
+    conn = sqlite3.connect(database="/Users/lwj/AI_project/agent/langgraph/sqlite_data.db",check_same_thread=False)
     sqliteDB = SqliteSaver(conn=conn)
 
     builder = StateGraph(MyState)

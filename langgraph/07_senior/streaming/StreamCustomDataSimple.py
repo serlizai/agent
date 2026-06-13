@@ -34,6 +34,7 @@ graph = (
 )
 
 # Set stream_mode="custom" to receive the custom data in the stream
+# 就是custom模式只会输出自定义数据，不会输出状态更新或完整状态，要设置混合模式
 # for chunk in graph.stream({"query": "example"}, stream_mode=["custom"]):
 #     print(chunk)
 #

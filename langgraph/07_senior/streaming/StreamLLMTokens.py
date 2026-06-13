@@ -27,7 +27,7 @@ def node(state:State):
                             model_provider="openai",
                             api_key=os.getenv("aliQwen-api"),
                             base_url="https://dashscope.aliyuncs.com/compatible-mode/v1")
-
+    # ("user", state["query"])相当于HumanMessage(content=state["query"])
     llm_result = model.invoke( [("user",state["query"])] )
     print("llm invoke结束",end="\n\n")
 

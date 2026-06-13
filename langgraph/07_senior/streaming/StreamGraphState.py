@@ -36,13 +36,13 @@ def main():
       .compile()
     )
 
-    # updates在图的每一步后，将更新流向状态。
+    # updates在图的每一步后，将更新流向状态。输出节点当时的状态(结果)
     for chunk in graph.stream({"topic": "ice cream"},stream_mode="updates"):
         print(chunk)
 
     print()
 
-    # values在图的每一步后，流出状态的全部值。
+    # values在图的每一步后，流出状态的全部值。输出状态的所有情况(过程)
     for chunk in graph.stream({"topic": "ice cream"},stream_mode="values"):
         print(chunk)
 

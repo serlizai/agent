@@ -22,6 +22,8 @@ dependencies = [
     "langchain-redis>=0.2.5",
     "langchain-unstructured>=1.0.1",
     "langgraph>=1.0.5",
+    "langgraph-checkpoint-sqlite>=3.1.0",
+    "langgraph-supervisor>=0.0.31",
     "loguru>=0.7.3",
     "markdown>=3.10.2",
     "numpy>=2.0.2",
@@ -36,3 +38,7 @@ dependencies = [
     "redisvl>=0.18.0",
     "unstructured>=0.18.32",
 ]
+
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
