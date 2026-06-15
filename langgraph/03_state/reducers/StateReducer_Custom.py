@@ -14,6 +14,7 @@ def MyOperatorMul(current: float, update: float) -> float:
     return current * update
 
 class MultiplyState(TypedDict):
+    # operator.mul(默认初始值, invoke传入的值)
     factor: Annotated[float, MyOperatorMul]
 
 def multiplier(state: MultiplyState) -> dict:

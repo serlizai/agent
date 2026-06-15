@@ -31,7 +31,7 @@ def get_weather(city: str) -> str:
     resp = httpx.get(url, params=params, timeout=10)
     data = resp.json()
     logger.info(f"查询 {city} 天气结果：{data}")
-    return json.dumps(data, ensure_ascii=False)
+    return json.dumps(data, ensure_ascii=False)  # 将字典转换为JSON字符串，并保持中文字符不被转义
 
 
 if __name__ == "__main__":

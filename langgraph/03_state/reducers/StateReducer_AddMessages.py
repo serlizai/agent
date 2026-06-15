@@ -25,6 +25,12 @@ class AddMessagesState(TypedDict):
     """
     messages: Annotated[List, add_messages]
 
+# "user"        用户消息，会转成 HumanMessage
+# "human"       同 user
+# "assistant"   AI 消息，会转成 AIMessage
+# "ai"          同 assistant
+# "system"      系统消息，会转成 SystemMessage
+# "tool"        工具消息，会转成 ToolMessage，通常还需要 tool_call_id
 def chat_node_1(state: AddMessagesState) -> dict:
     return {"messages": [("assistant", "Hello from node 1")]}
 

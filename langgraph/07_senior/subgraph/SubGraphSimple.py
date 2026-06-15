@@ -1,4 +1,4 @@
-'''将子图作为节点添加到父图'''
+'''将子图作为节点添加到父图，状态必须一样，父图状态必须包含子图状态的字段，否则执行时会报KeyError'''
 
 from langgraph.graph import StateGraph, START, END
 from typing import TypedDict
@@ -25,7 +25,7 @@ def subgraph_node(state: SubgraphState) -> SubgraphState:
 # 3. 定义父图节点函数
 def parent_node(state: ParentState) -> ParentState:
     """父图初始节点：初始化共享数据"""
-    if not state.get("parent_messages"):
+    if not state.get("parent_messages"):  # 确保parent_messages存在，避免KeyError
         state["parent_messages"] = []
     state["parent_messages"].append("message from 父亲 node")
     return state

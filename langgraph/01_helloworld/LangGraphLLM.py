@@ -12,19 +12,23 @@ from langgraph.graph.message import add_messages
 import os
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage
+from dotenv import load_dotenv
+
+load_dotenv()  # 加载环境变量
 
 
 # ========== 1. 定义状态（State） ==========
 # 存储对话消息
 class AtguiguState(TypedDict):
     # messages 是一个消息列表，Annotated + add_messages 表示支持自动追加消息
+    # 当节点函数返回 {"messages": [new_message]} 时这个 new_message 会自动被添加到 state["messages"] 里，形成对话历史
     messages: Annotated[List, add_messages]
 
 # ========== 2. 定义大模型 ==========
 llm = init_chat_model(
-    model="qwen-plus",
+    model="qwen3.6-flash",
     model_provider="openai",
-    api_key=os.getenv("aliQwen-api"),
+    api_key=os.getenv("QWEN_API_KEY"),
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
 )
 

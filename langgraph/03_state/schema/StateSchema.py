@@ -47,6 +47,7 @@ def demo_input_output_schema():
     print("=== 演示输入输出模式 ===")
 
     # 使用指定的输入和输出模式构建图
+    # 参数里面*之后必须是关键字参数，明确指定输入输出模式
     builder = StateGraph(OverallState, input_schema=InputState, output_schema=OutputState)
     builder.add_edge(START, "answer_node")  # 定义起始边
     builder.add_node("answer_node", answer_node)  # 添加答案节点

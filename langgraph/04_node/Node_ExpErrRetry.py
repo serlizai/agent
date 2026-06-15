@@ -8,7 +8,7 @@ LangGraph 节点重试策略演示
 from typing import Dict, Any
 from typing_extensions import TypedDict
 from langgraph.graph import StateGraph, START, END
-from langgraph.types import RetryPolicy
+from langgraph.types import CachePolicy, RetryPolicy
 
 
 # 定义状态类型
@@ -25,13 +25,15 @@ def build_retry_graph(node_name: str, node_func, retry_policy: RetryPolicy):
     #为节点添加重试策略，需要在add_node中设置retry_policy参数。
     # retry_policy参数接受一个RetryPolicy命名元组对象。
     # 默认情况下，retry_on参数使用default_retry_on函数，该函数会在遇到任何异常时重试
-    builder.add_node(node_name, node_func, retry_policy=retry_policy)
+    builder.add_node(node_name, node_func, retry_policy=retry_policy, cache_policy=CachePolicy(ttl=20))
     builder.add_edge(START, node_name)
     builder.add_edge(node_name, END)
     return builder.compile()
 
 
 # 模拟不稳定的API调用，使用全局变量跟踪尝试次数
+# 单次函数调用里：raise 后不会走 return
+# 整个 LangGraph 执行里：异常触发重试，下一次重新进函数，成功时才走 return
 def unstable_api_call(state: AtguiguState) -> Dict[str, Any]:
     """模拟不稳定API：前2次失败，第3次成功（全局计数器记录尝试次数）"""
     global attempt_counter
@@ -92,6 +94,7 @@ def test_custom_retry():
     print("   自定义策略只对特定错误进行重试\n")
     print("测试自定义重试策略:")
     attempt_counter = 0  # 重置计数器
+    # 最多尝试 5 次，但每次失败后，要先问 custom_retry_on：这个异常能不能重试？
     custom_graph = build_retry_graph(
         node_name="custom_retry_api",
         node_func=unstable_api_call,

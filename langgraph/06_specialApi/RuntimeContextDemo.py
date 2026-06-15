@@ -22,7 +22,8 @@ class AgentState(TypedDict):
 
 
 # 定义上下文结构
-@dataclass
+@dataclass # 适合用来定义“主要存数据的类”
+# 自动生成 __init__、__repr__、__eq__ 等方法，简化代码
 class ContextSchema:
     model_name: str
     db_connection: str
